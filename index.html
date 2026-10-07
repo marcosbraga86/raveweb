@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RAVE Web</title>
+<style>
+:root{--primary:oklch(0.38 0.09 160);--pf:oklch(0.99 0.01 145);--accent:oklch(0.82 0.16 148);--af:oklch(0.22 0.08 160);--bg:oklch(0.985 0.005 145);--fg:oklch(0.18 0.04 165);--sec:oklch(0.94 0.04 155);--muted:oklch(0.95 0.01 150);--dest:oklch(0.577 0.245 27.325);--bd:oklch(0.9 0.02 150);--ring:oklch(0.5 0.12 160);--r:.75rem;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:oklch(0.2 0.03 160);--fg:oklch(0.96 0.01 145);--muted:oklch(0.27 0.03 160);--sec:oklch(0.3 0.04 160);--bd:oklch(0.35 0.03 160);--card:oklch(0.24 0.03 160)}}
+:root{--card:#fff}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--card:oklch(0.24 0.03 160)}}
+*{box-sizing:border-box}html,body{height:auto;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--fg);background:var(--bg);background-image:radial-gradient(circle at top left,oklch(0.82 0.16 148/.25),transparent 45%),radial-gradient(circle at bottom right,oklch(0.5 0.12 160/.2),transparent 45%);background-attachment:fixed;min-height:100svh}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--primary);color:var(--pf);height:64px}
+.w{max-width:56rem;margin:0 auto;padding:0 1rem}
+header .w{display:flex;align-items:center;justify-content:space-between;height:64px}
+header a{color:inherit;text-decoration:none;display:flex;gap:.6rem;align-items:center}
+header small{display:block;font-size:10px;opacity:.8}
+main{max-width:56rem;margin:0 auto;padding:1rem 1rem 7rem}
+footer{text-align:center;font-size:12px;opacity:.7;padding:1rem 1rem 6rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:1rem;margin-bottom:1rem;box-shadow:0 1px 3px #0001}
+.card.l{border-left:4px solid var(--primary)}
+.card h3{margin:0 0 .75rem;font-size:1rem;display:flex;gap:.5rem;align-items:center}
+.hero{background:linear-gradient(135deg,var(--primary),var(--primary),oklch(0.38 0.09 160/.8));color:var(--pf);border-radius:1rem;padding:1.5rem;margin-bottom:1rem}
+.hero h1{margin:.6rem 0 .3rem;font-size:1.6rem}.hero p{opacity:.85;margin:0 0 1rem}
+.badge{display:inline-flex;gap:.3rem;align-items:center;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sec);color:var(--fg)}
+.badge.o{background:none;border:1px solid var(--bd)}
+.hero .badge{background:oklch(1 0 0/.15);color:var(--pf)}
+.btn{display:inline-flex;gap:.4rem;align-items:center;justify-content:center;font:inherit;font-weight:600;min-height:44px;padding:0 1rem;border-radius:var(--r);border:1px solid transparent;cursor:pointer;background:var(--primary);color:var(--pf)}
+.btn.a{background:var(--accent);color:var(--af)}.btn.o{background:var(--card);color:var(--fg);border-color:var(--bd)}.btn.g{background:none;color:inherit}
+.btn.d{background:var(--dest);color:#fff}.btn.i{padding:0;width:44px}.btn.f{width:100%}
+.btn:focus-visible,.in:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.btn.dash{border:2px dashed var(--bd);background:none;color:var(--fg);flex-direction:column;padding:1rem;min-height:72px}
+label{display:block;font-size:.85rem;font-weight:600;margin:.6rem 0 .25rem}
+.in{width:100%;min-height:44px;padding:.5rem .75rem;border:1px solid var(--bd);border-radius:var(--r);background:var(--card);color:var(--fg);font:inherit}
+textarea.in{min-height:90px}
+.g2{display:grid;grid-template-columns:1fr;gap:0 .75rem}@media(min-width:640px){.g2{grid-template-columns:1fr 1fr}}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom,0px));z-index:15}
+.bar>div{max-width:56rem;margin:0 auto;display:flex;gap:.5rem}.bar .btn{flex:1}.bar .btn.i{flex:0 0 44px}
+.row{display:flex;gap:.75rem;align-items:flex-start;justify-content:space-between}
+.mut{color:oklch(0.5 0.03 160);font-size:.85rem}
+.err{background:oklch(0.577 0.245 27.325/.12);color:var(--dest);padding:.6rem .8rem;border-radius:var(--r);margin-bottom:.75rem;font-size:.9rem}
+.ok{background:var(--sec);padding:.6rem .8rem;border-radius:var(--r);margin-bottom:.75rem;font-size:.9rem}
+.th{display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap}.th img{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)}
+.cl{cursor:pointer}.empty{border:2px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center}
+.sum{background:var(--primary);color:var(--pf)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--sec);display:grid;place-items:center;flex:none}
+.sp{animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
+.rd{display:flex;align-items:center;gap:.5rem;flex:1;min-height:44px;padding:0 1rem;margin:0;border:1px solid var(--bd);border-radius:var(--r);background:var(--card);cursor:pointer;font-weight:600}.rd input{width:20px;height:20px;margin:0;accent-color:var(--primary)}
+.hid{display:none}.ic{flex:none;vertical-align:-3px}.btn .ic,.badge .ic{vertical-align:middle}
+@media print{body{background:#fff}.no-print,header,footer,.bar{display:none!important}}
+#us{display:inline-flex;gap:.5rem;align-items:center}#us.hid{display:none}#st{font-size:11px;opacity:.85}
+@media(max-width:520px){header .hs{display:none}}
+</style></head><body>
+<header class="no-print"><div class="w"><a href="#/"><svg id="lg" width="32" height="32"></svg><span><b>NCR ATLEOS</b><small>RAVE Web</small></span></a><span style="display:flex;gap:.4rem;align-items:center;font-size:.85rem"><span id="hi" style="display:inline-flex"></span> <span class="hs">Relatório de Viagens</span><span id="us" class="hid"><span id="st"></span><button class="btn g" id="out" type="button" style="min-height:36px;padding:0 .7rem;font-size:.85rem;border-color:oklch(1 0 0/.45)">Sair</button></span></span></div></header>
+<main id="m"></main><footer id="ft" class="no-print"></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Chaves de armazenamento mantidas iguais para preservar perfil e relatórios já salvos */
+const K1='rave-mobile-v1-reports',K2='rave-mobile-v1-perfil';
+const ORGS=['ABC','BCA','CBA'],CC={ABC:['1111111'],BCA:['222222'],CBA:['3333333']};
+const TIPOS=[{codigo:'REF',nome:'REFEIÇÃO JANTAR / MEAL'},{codigo:'EST',nome:'ESTACIONAMENTO'}];
+const $=s=>document.querySelector(s),M=$('#m');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n||0);
+const fd=d=>d?d.split('-').reverse().join('/'):'';
+const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const rd=n=>Math.round(n*100)/100;
+/* ===== Login e sincronização (Supabase) ===== */
+const SB_URL='https://xedvpyoxfcntqgpuybnr.supabase.co',SB_KEY='sb_publishable_ZMk6ZVQKXjXBTbW_fBtFmg_Ei_djh9G';
+const sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null;
+const KEYS=[K1,K2];
+let USER=null,CACHE={},PEND={},TIMERS={},BOOTED=false,RECOVERY=false;
+const lk=k=>`rave:${USER?.id}:${k}`;
+const clone=v=>JSON.parse(JSON.stringify(v));
+const pp=()=>{try{localStorage.setItem(`rave-pend:${USER.id}`,JSON.stringify(Object.keys(PEND)))}catch(e){}};
+const ST_TXT={ok:'Salvo',sync:'Enviando…',err:'Sem conexão',off:'Offline'};
+function setST(s){const e=$('#st');if(!e)return;e.textContent=ST_TXT[s]||'';e.title=s==='err'||s==='off'?'Alterações ficam guardadas neste aparelho e são enviadas quando houver conexão.':''}
+const ld=(k,d)=>{const v=CACHE[k];return v==null?d:clone(v)};
+const sv=(k,v)=>{if(!USER){alert('Entre na sua conta para salvar.');return false}CACHE[k]=clone(v);try{localStorage.setItem(lk(k),JSON.stringify(v))}catch(e){}agendar(k);return true};
+function agendar(k){PEND[k]=true;pp();setST('sync');clearTimeout(TIMERS[k]);TIMERS[k]=setTimeout(()=>enviar(k),700)}
+async function enviar(k){
+ if(!USER)return;const uid=USER.id;
+ try{
+  const r=CACHE[k]===undefined
+   ?await sb.from('dados_app').delete().eq('user_id',uid).eq('chave',k)
+   :await sb.from('dados_app').upsert({user_id:uid,chave:k,valor:CACHE[k],atualizado_em:new Date().toISOString()},{onConflict:'user_id,chave'});
+  if(r.error)throw r.error;
+  delete PEND[k];pp();
+  if(!Object.keys(PEND).length)setST('ok')
+ }catch(e){console.error('sync',e);setST('err');clearTimeout(TIMERS[k]);TIMERS[k]=setTimeout(()=>enviar(k),15000)}
+}
+async function flush(){for(const k of Object.keys(PEND)){clearTimeout(TIMERS[k]);await enviar(k)}}
+async function carregarDados(){
+ const{data,error}=await sb.from('dados_app').select('chave,valor').in('chave',KEYS);
+ if(error)throw error;
+ const rem={};(data||[]).forEach(x=>rem[x.chave]=x.valor);
+ let pend=[];try{pend=JSON.parse(localStorage.getItem(`rave-pend:${USER.id}`)||'[]')}catch(e){}
+ const migKey=`rave-mig:${USER.id}`,leg={};
+ if(!localStorage.getItem(migKey)){
+  for(const k of KEYS){const l=localStorage.getItem(k);if(l!==null&&rem[k]===undefined&&!pend.includes(k))leg[k]=l}
+  if(Object.keys(leg).length&&!confirm('Encontrei perfil/relatórios salvos neste aparelho antes do login. Deseja importar para a sua conta?'))for(const k in leg)delete leg[k];
+  try{localStorage.setItem(migKey,'1')}catch(e){}
+ }
+ let mudou=false;
+ for(const k of KEYS){
+  const loc=localStorage.getItem(lk(k)),ant=JSON.stringify(CACHE[k]);let novo,env=false;
+  if(pend.includes(k)&&loc!==null){novo=JSON.parse(loc);env=true}
+  else if(rem[k]!==undefined)novo=rem[k];
+  else if(leg[k]!==undefined){novo=JSON.parse(leg[k]);env=true}
+  if(novo===undefined)delete CACHE[k];else CACHE[k]=novo;
+  try{novo===undefined?localStorage.removeItem(lk(k)):localStorage.setItem(lk(k),JSON.stringify(novo))}catch(e){}
+  if(JSON.stringify(novo)!==ant)mudou=true;
+  if(env)agendar(k)
+ }
+ return mudou
+}
+function carregarLocal(){for(const k of KEYS){const l=localStorage.getItem(lk(k));if(l!==null)try{CACHE[k]=JSON.parse(l)}catch(e){}}}
+async function carregarSeguro(){
+ try{await carregarDados();setST('ok')}
+ catch(e){console.error(e);carregarLocal();setST('off');
+  if(/dados_app|PGRST205|42P01/.test(JSON.stringify(e)))alert('A tabela "dados_app" não foi encontrada no Supabase. Rode o script SQL no SQL Editor e recarregue a página.')}
+}
+async function sessao(s,ev){
+ const novo=s&&s.user||null;
+ if(ev==='PASSWORD_RECOVERY')RECOVERY=true;
+ if(novo&&USER&&novo.id===USER.id){USER=novo;if(ev==='PASSWORD_RECOVERY')render();return}
+ if(!novo&&!USER&&BOOTED){if(ev==='PASSWORD_RECOVERY')render();return}
+ if(novo){USER=novo;CACHE={};PEND={};await carregarSeguro()}
+ else{USER=null;CACHE={};PEND={};RECOVERY=false}
+ BOOTED=true;if((location.hash.slice(1)||'/')!=='/')location.hash='#/';render()
+}
+async function sair(){
+ await flush();
+ if(Object.keys(PEND).length&&!confirm('Há alterações que ainda não foram enviadas (sem conexão). Se sair agora, elas só serão enviadas no próximo login neste aparelho. Sair mesmo assim?'))return;
+ if(!Object.keys(PEND).length)KEYS.forEach(k=>{try{localStorage.removeItem(lk(k));localStorage.removeItem(`rave-pend:${USER.id}`)}catch(e){}});
+ await sb.auth.signOut()
+}
+const aviso=(t,x)=>`<div class="${t}">${esc(x)}</div>`;
+const msgErr=m=>{const t={'Invalid login credentials':'E-mail ou senha incorretos.','Email not confirmed':'Confirme seu e-mail pelo link que enviamos antes de entrar.','User already registered':'Este e-mail já tem conta. Use "Entrar" ou recupere a senha.'}[m];
+ if(t)return t;if(/at least/i.test(m))return 'A senha precisa ter pelo menos 6 caracteres.';if(/rate limit|too many/i.test(m))return 'Muitas tentativas. Aguarde alguns minutos e tente de novo.';if(/fetch|network/i.test(m))return 'Sem conexão. Verifique a internet e tente de novo.';return m};
+function telaLogin(modo,msg){
+ modo=modo||(RECOVERY?'nova':'entrar');$('#ft').innerHTML='';
+ const T={entrar:['Entrar','Acesse seus relatórios em qualquer aparelho.','Entrar'],criar:['Criar conta','Use seu e-mail e uma senha com pelo menos 6 caracteres.','Criar conta'],esqueci:['Recuperar senha','Enviaremos um link para o seu e-mail.','Enviar link'],nova:['Nova senha','Defina a nova senha da sua conta.','Salvar nova senha']}[modo];
+ M.innerHTML=`<div class="hero"><span class="badge">${ic('user',14)} RAVE Web</span><h1>${T[0]}</h1><p>${T[1]}</p></div>
+<form class="card" id="lf" style="max-width:28rem;margin:0 auto 1rem" novalidate><div id="am">${msg||''}</div>
+${modo!=='nova'?`<label for="em">E-mail</label><input class="in" id="em" type="email" autocomplete="email" inputmode="email" autocapitalize="off">`:''}
+${modo!=='esqueci'?`<label for="pw">${modo==='nova'?'Nova senha':'Senha'}</label><input class="in" id="pw" type="password" autocomplete="${modo==='entrar'?'current-password':'new-password'}">`:''}
+<div style="margin-top:1rem"><button class="btn f" id="go" type="submit">${T[2]}</button></div>
+${modo==='entrar'?`<div class="row" style="margin-top:.5rem"><button class="btn g" type="button" data-m="criar">Criar conta</button><button class="btn g" type="button" data-m="esqueci">Esqueci a senha</button></div>`:''}
+${modo==='criar'||modo==='esqueci'?`<div style="margin-top:.5rem"><button class="btn g f" type="button" data-m="entrar">Voltar para entrar</button></div>`:''}</form>`;
+ M.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>telaLogin(b.dataset.m));
+ const say=(t,x)=>{$('#am').innerHTML=aviso(t,x)},base=location.href.split('#')[0];
+ $('#lf').onsubmit=async e=>{e.preventDefault();
+  const em=($('#em')?.value||'').trim(),pw=$('#pw')?.value||'',b=$('#go');
+  if(modo!=='nova'&&!em)return say('err','Informe o e-mail.');
+  if(modo!=='esqueci'){if(modo==='entrar'&&!pw)return say('err','Informe a senha.');if(modo!=='entrar'&&pw.length<6)return say('err','A senha precisa ter pelo menos 6 caracteres.')}
+  b.disabled=true;
+  try{
+   if(modo==='entrar'){const{error}=await sb.auth.signInWithPassword({email:em,password:pw});if(error)throw error}
+   else if(modo==='criar'){const{data,error}=await sb.auth.signUp({email:em,password:pw,options:{emailRedirectTo:base}});if(error)throw error;
+    if(data.user&&data.user.identities&&data.user.identities.length===0)throw new Error('User already registered');
+    if(!data.session)return telaLogin('entrar',aviso('ok','Conta criada. Enviamos um link de confirmação para o seu e-mail. Confirme e depois entre.'))}
+   else if(modo==='esqueci'){const{error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:base});if(error)throw error;return telaLogin('entrar',aviso('ok','Se o e-mail tiver conta, você receberá um link para criar uma nova senha.'))}
+   else{const{error}=await sb.auth.updateUser({password:pw});if(error)throw error;RECOVERY=false;render()}
+  }catch(err){say('err',msgErr(err.message||String(err)));b.disabled=false}
+ };
+ setTimeout(()=>($('#em')||$('#pw'))?.focus(),0)
+}
+const loadRelatorios=()=>ld(K1,[]),saveRelatorios=l=>sv(K1,l);
+const getRelatorio=id=>loadRelatorios().find(r=>r.id===id);
+function upsertRelatorio(r){const l=loadRelatorios(),i=l.findIndex(x=>x.id===r.id);r.atualizadoEm=new Date().toISOString();i<0?l.unshift(r):l[i]=r;return saveRelatorios(l)}
+const deleteRelatorio=id=>saveRelatorios(loadRelatorios().filter(r=>r.id!==id));
+function upsertDespesa(rid,d){const r=getRelatorio(rid);const i=r.despesas.findIndex(x=>x.id===d.id);i<0?r.despesas.push(d):r.despesas[i]=d;return upsertRelatorio(r)}
+function deleteDespesa(rid,did){const r=getRelatorio(rid);r.despesas=r.despesas.filter(x=>x.id!==did);upsertRelatorio(r)}
+const carregarPerfil=()=>ld(K2,null),temPerfil=()=>!!carregarPerfil(),perfilCompleto=()=>{const p=carregarPerfil();return !!(p&&p.nome&&p.centroCusto&&p.funcionalSap&&p.quickLookId)},apagarPerfil=()=>{delete CACHE[K2];try{localStorage.removeItem(lk(K2))}catch(e){}agendar(K2)};
+function salvarPerfil(p){const o=carregarPerfil(),n=new Date().toISOString();return sv(K2,{...p,criadoEm:o?.criadoEm||n,atualizadoEm:n})}
+const fileToDataUrl=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)});
+const loadPdfJs=()=>window.pdfjsLib?Promise.resolve():new Promise((ok,no)=>{const x=document.createElement('script');x.src='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';x.onload=ok;x.onerror=no;document.head.appendChild(x)});
+async function renderPdfComoImagens(url,max=8,esc_=1.4){try{await loadPdfJs();
+pdfjsLib.GlobalWorkerOptions.workerSrc=document.querySelector('script[src*="jsdelivr"]')?'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js':'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const b=atob(url.split(',')[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);
+const pdf=await pdfjsLib.getDocument({data:u}).promise,out=[];
+for(let p=1;p<=Math.min(pdf.numPages,max);p++){const pg=await pdf.getPage(p),vp=pg.getViewport({scale:esc_}),c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);await pg.render({canvasContext:x,viewport:vp}).promise;out.push(c.toDataURL('image/jpeg',0.85))}return out}catch(e){console.error(e);return[]}}
+function calcularTotais(r){const por=TIPOS.map(t=>({key:t.codigo,nome:t.nome,total:rd(r.despesas.filter(d=>d.tipoCodigo===t.codigo).reduce((s,d)=>s+d.valor,0))}));
+const total=rd(r.despesas.reduce((s,d)=>s+d.valor,0)),ad=r.adiantamento||0,cc=r.cartaoCorporativo||0,saldo=rd(ad+cc-total);
+return{porCategoria:por,totalDespesas:total,adiantamento:ad,cartaoCorporativo:cc,valorDevolucao:Math.max(saldo,0),valorReembolso:Math.max(-saldo,0)}}
+const logo=(s=32)=>`<svg viewBox="0 0 512 512" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="16"><circle cx="256" cy="256" r="220"/><ellipse cx="256" cy="256" rx="220" ry="35"/><ellipse cx="256" cy="256" rx="90" ry="220"/><ellipse cx="256" cy="256" rx="90" ry="220" transform="rotate(60 256 256)"/></svg>`;
+const IC={"smartphone": "<rect width=\"14\" height=\"20\" x=\"5\" y=\"2\" rx=\"2\"/><path d=\"M12 18h.01\"/>", "left": "<path d=\"m12 19-7-7 7-7\"/><path d=\"M19 12H5\"/>", "right": "<path d=\"m9 18 6-6-6-6\"/>", "user": "<path d=\"M18 20a6 6 0 0 0-12 0\"/><circle cx=\"12\" cy=\"10\" r=\"4\"/><circle cx=\"12\" cy=\"12\" r=\"10\"/>", "sparkles": "<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\"/>", "trash": "<path d=\"M3 6h18\"/><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"/><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"/><path d=\"M10 11v6\"/><path d=\"M14 11v6\"/>", "pencil": "<path d=\"M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z\"/><path d=\"m15 5 4 4\"/>", "save": "<path d=\"M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z\"/><path d=\"M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7\"/><path d=\"M7 3v4a1 1 0 0 0 1 1h7\"/>", "plusc": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 12h8\"/><path d=\"M12 8v8\"/>", "plus": "<path d=\"M5 12h14\"/><path d=\"M12 5v14\"/>", "clip": "<path d=\"m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48\"/>", "camera": "<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\"/><circle cx=\"12\" cy=\"13\" r=\"3\"/>", "file": "<path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"M10 9H8\"/><path d=\"M16 13H8\"/><path d=\"M16 17H8\"/>", "filedown": "<path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"M12 18v-6\"/><path d=\"m9 15 3 3 3-3\"/>", "receipt": "<path d=\"M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z\"/><path d=\"M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8\"/><path d=\"M12 17.5v-11\"/>", "up": "<polyline points=\"22 7 13.5 15.5 8.5 10.5 2 17\"/><polyline points=\"16 7 22 7 22 13\"/>", "down": "<polyline points=\"22 17 13.5 8.5 8.5 13.5 2 7\"/><polyline points=\"16 17 22 17 22 11\"/>", "x": "<path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/>", "loader": "<path d=\"M21 12a9 9 0 1 1-6.219-8.56\"/>", "alert": "<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/>", "check": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/>"};
+const ic=(n,z=18)=>`<svg class="ic" width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+$('#lg').outerHTML=logo();$('#hi').innerHTML=ic('smartphone',18);
+const opts=(a,s)=>a.map(x=>`<option ${x===s?'selected':''}>${x}</option>`).join('');
+const cur=(n,v)=>`<input class="in" inputmode="numeric" data-cur name="${n}" data-v="${v||0}" value="${fmt(v||0)}">`;
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset&&'cur' in t.dataset){const v=Number(t.value.replace(/\D/g,''))/100;t.dataset.v=v;t.value=fmt(v)}});
+const go=p=>{location.hash=p},cv=n=>Number($(`[name=${n}]`).dataset.v);
+const val=n=>($(`[name=${n}]`)?.value||'').trim();
+const bar=h=>`<div class="bar no-print"><div>${h}</div></div>`;
+const back=(to,t)=>`<div class="row" style="align-items:center;margin-bottom:1rem"><div style="display:flex;gap:.5rem;align-items:center;min-width:0"><button class="btn o i" data-go="${to}" aria-label="Voltar">${ic('left')}</button><h1 style="margin:0;font-size:1.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t}</h1></div></div>`;
+function wire(){M.querySelectorAll('[data-go]').forEach(b=>b.onclick=e=>{e.stopPropagation();go(b.dataset.go)})}
+
+function perfilForm(onb){const p=carregarPerfil()||{organizacao:'ABC'};const inc=temPerfil()&&!p.quickLookId;
+M.innerHTML=`${onb?`<div class="hero"><span class="badge">Bem-vindo</span><h1>${inc?'Atualize seu perfil':'Crie seu perfil'}</h1><p>${inc?'Informe seu QuickLook ID para continuar. Seus demais dados foram mantidos.':'Cadastre seus dados para começar a criar relatórios.'}</p></div>`:back('/','Meu perfil')}<div id="ms"></div>
+<div class="card"><h3>Seus dados</h3><label>Nome completo*</label><input class="in" name="nome" value="${esc(p.nome)}"><label>Organização</label><select class="in" name="org">${opts(ORGS,p.organizacao)}</select><label>Centro de custo*</label><select class="in" name="cc"></select><label>Funcional SAP*</label><input class="in" name="sap" inputmode="numeric" value="${esc(p.funcionalSap)}"><label>QuickLook ID*</label><input class="in" name="ql" autocomplete="off" autocapitalize="off" value="${esc(p.quickLookId)}">
+<div style="margin-top:1rem"><button class="btn f" id="sv">${ic('save')} ${onb?'Salvar e continuar':'Salvar alterações'}</button></div></div>
+${!onb&&temPerfil()?`<div class="card" style="border-color:var(--dest)"><h3 style="color:var(--dest)">Zona de risco</h3><button class="btn d" id="del">Apagar meu perfil</button></div>`:''}`;
+const fill=s=>{$('[name=cc]').innerHTML='<option value="">Selecione…</option>'+CC[$('[name=org]').value].map(c=>`<option ${c===s?'selected':''}>${c}</option>`).join('')};
+fill(p.centroCusto);$('[name=org]').onchange=()=>fill('');
+$('#sv').onclick=()=>{const n=val('nome'),c=$('[name=cc]').value,s=val('sap'),q=val('ql');
+if(!n||!c||!s||!q){$('#ms').innerHTML='<div class="err">Preencha nome, centro de custo, Funcional SAP e QuickLook ID.</div>';return}
+if(!salvarPerfil({nome:n,organizacao:$('[name=org]').value,centroCusto:c,funcionalSap:s,quickLookId:q}))return;
+if(onb)return render();$('#ms').innerHTML='<div class="ok">'+ic('check',16)+' Perfil salvo com sucesso.</div>'};
+if($('#del'))$('#del').onclick=()=>{if(confirm('Apagar seu perfil?')){apagarPerfil();go('/');render()}};wire()}
+
+function home(){const p=carregarPerfil(),l=loadRelatorios();
+M.innerHTML=`<div class="hero"><div class="row"><span class="badge">${ic('sparkles',14)} RAVE Web</span><button class="btn g i" data-go="/perfil" aria-label="Perfil">${ic('user',22)}</button></div><h1>Seus relatórios de viagem</h1><p>Preencha o RAVE, anexe comprovantes e exporte em PDF — seus dados ficam salvos na sua conta e disponíveis em qualquer aparelho.</p><button class="btn a" data-go="/relatorio/novo">${ic('plus')} Novo Relatório</button></div>
+${p?`<div class="card cl row" data-go="/perfil" style="align-items:center"><div style="display:flex;gap:.75rem;align-items:center"><div class="av">${ic('user',24)}</div><div><b>${esc(p.nome)}</b><div class="mut">${p.organizacao} · CC ${esc(p.centroCusto)} · Func. ${esc(p.funcionalSap)}${p.quickLookId?' · QL '+esc(p.quickLookId):''}</div></div></div>${ic('right')}</div>`:''}
+${l.length?`<h2 style="font-size:1.1rem">Relatórios (${l.length})</h2>`+l.map(r=>{const t=calcularTotais(r);return`<div class="card l cl row" data-go="/relatorio/${r.id}"><div style="min-width:0"><b>${esc(r.descricao)}</b><div class="mut">${esc(r.nome)} · ${fd(r.dataInicio)} a ${fd(r.dataFim)}</div><div class="mut">${r.despesas.length} despesa(s) · ${fmt(t.totalDespesas)}</div></div><button class="btn g i" data-del="${r.id}" aria-label="Excluir">${ic('trash')}</button></div>`}).join(''):`<div class="empty">${ic('file',32)}<p><b>Nenhum relatório ainda</b></p><p class="mut">Toque em "Novo Relatório" para começar.</p></div>`}`;
+M.querySelectorAll('[data-del]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(confirm('Excluir este relatório?')){deleteRelatorio(b.dataset.del);home()}});wire()}
+
+function relForm(id){const ex=id&&getRelatorio(id);if(id&&!ex)return nf();const p=carregarPerfil();const fromP=!ex&&p;
+const r=ex||{nome:p?.nome||'',descricao:'',dataInicio:'',dataFim:'',organizacao:p?.organizacao||'ABC',centroCusto:p?.centroCusto||'',funcionalSap:p?.funcionalSap||'',quickLookId:p?.quickLookId||'',numeroViagemSap:'',adiantamento:0,cartaoCorporativo:0,comentarios:''};
+let hh=r.houveHospedagem===true,anexoH=r.anexoHospedagem||null;
+M.innerHTML=`${back(ex?'/relatorio/'+id:'/',ex?'Editar relatório':'Novo relatório')}${fromP?'<div class="ok">'+ic('user',16)+' Dados do perfil aplicados · <a href="#/perfil">Editar meu perfil</a></div>':''}<div id="ms"></div>
+<div class="card"><h3>Dados do viajante</h3><label>Nome*</label><input class="in" name="nome" value="${esc(r.nome)}"><label>Descrição*</label><input class="in" name="desc" value="${esc(r.descricao)}"><div class="g2"><div><label>Data Início*</label><input class="in" type="date" name="di" value="${r.dataInicio}"></div><div><label>Data Fim*</label><input class="in" type="date" name="df" min="${r.dataInicio}" value="${r.dataFim}"></div></div></div>
+<div class="card"><h3>Organização e centro de custo</h3><label>Organização</label><select class="in" name="org">${opts(ORGS,r.organizacao)}</select><label>Centro de custo*</label><select class="in" name="cc"></select><label>Funcional SAP ${fromP?'<span class="badge">do perfil</span>':''}</label><input class="in" name="sap" value="${esc(r.funcionalSap)}"><label>Nº Viagem SAP</label><input class="in" name="nv" value="${esc(r.numeroViagemSap)}"></div>
+<div class="card"><h3>${ic('clip')} Hospedagem</h3><label>Houve hospedagem?</label><div style="display:flex;gap:.5rem"><label class="rd"><input type="radio" name="hh" value="0" ${hh?'':'checked'}> Não</label><label class="rd"><input type="radio" name="hh" value="1" ${hh?'checked':''}> Sim</label></div>
+<div id="hb" class="${hh?'':'hid'}"><label>Reserva de hospedagem / Nº SAP</label><input type="file" id="hfc" class="hid" accept="image/*" capture="environment"><input type="file" id="hff" class="hid" accept="application/pdf,image/jpeg,image/png,image/*">
+<div class="g2" style="gap:.5rem"><button class="btn dash" id="hbf" style="margin-bottom:.5rem">${ic('clip',22)} Anexar reserva</button><button class="btn dash" id="hbc" style="margin-bottom:.5rem">${ic('camera',22)} Tirar foto</button></div><div class="mut">PDF, JPG/JPEG ou PNG. Este anexo não é comprovante de despesa e será o primeiro anexo do PDF.</div><div id="hms"></div><div id="hld" class="mut hid"><span class="sp" style="display:inline-block">${ic('loader',16)}</span> Processando arquivo…</div><div id="hal"></div></div></div>
+<div class="card"><h3>Financeiro</h3><div class="g2"><div><label>Adiantamento</label>${cur('ad',r.adiantamento)}</div><div><label>Cartão Corporativo</label>${cur('cc2',r.cartaoCorporativo)}</div></div><label>Comentários</label><textarea class="in" name="com" placeholder="Se houver refeição acima de R$ 100,00 informe os participantes">${esc(r.comentarios)}</textarea></div>
+${bar(`<button class="btn" id="sv">${ic('save')} Salvar</button>`)}`;
+const fill=s=>{$('[name=cc]').innerHTML='<option value="">Selecione…</option>'+CC[$('[name=org]').value].map(c=>`<option ${c===s?'selected':''}>${c}</option>`).join('')};
+fill(r.centroCusto);$('[name=org]').onchange=()=>fill('');$('[name=di]').onchange=e=>$('[name=df]').min=e.target.value;
+const hlist=()=>{const a=anexoH;$('#hal').innerHTML=a?`<div class="row" style="align-items:center;border-top:1px solid var(--bd);padding:.5rem 0;margin-top:.5rem"><div style="display:flex;gap:.6rem;align-items:center;min-width:0">${thumb(a)?`<img src="${thumb(a)}" style="width:48px;height:48px;object-fit:cover;border-radius:8px" alt="">`:`<div class="av">${ic('file',22)}</div>`}<div style="min-width:0"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>${esc(a.nome)}</b></div><div class="mut">${esc(a.tipo)}${a.paginasImagem?.length?' · '+a.paginasImagem.length+' pág.':''}</div></div></div><button class="btn g i" id="hrm" aria-label="Remover reserva">${ic('x')}</button></div>`:'';
+if(a)$('#hrm').onclick=()=>{if(confirm('Remover a reserva de hospedagem anexada?')){anexoH=null;hlist()}}};hlist();
+const hproc=async f=>{const ms=$('#hms');ms.innerHTML='';if(!f)return;const pdf=f.type==='application/pdf'||/\.pdf$/i.test(f.name);
+if(!pdf&&!((f.type||'').startsWith('image/')||/\.(jpe?g|png|heic|webp)$/i.test(f.name))){ms.innerHTML='<div class="err">Formato não suportado. Use PDF, JPG ou PNG.</div>';return}
+if(anexoH&&!confirm('Já existe uma reserva anexada. Deseja substituí-la?'))return;
+$('#hld').classList.remove('hid');
+try{const u=await fileToDataUrl(f),a={nome:f.name,tipo:pdf?'application/pdf':(f.type||'image/jpeg'),dataUrl:u,criadoEm:new Date().toISOString()};
+if(pdf){a.paginasImagem=await renderPdfComoImagens(u,8,1.4);if(!a.paginasImagem.length)ms.innerHTML='<div class="err">Não foi possível gerar as páginas de '+esc(f.name)+'. Verifique a conexão e tente de novo; sem isso o PDF não sai no relatório impresso.</div>'}
+anexoH=a}catch(e){ms.innerHTML=`<div class="err">Falha ao ler ${esc(f.name)}.</div>`}
+$('#hld').classList.add('hid');hlist()};
+$('#hbf').onclick=()=>$('#hff').click();$('#hbc').onclick=()=>$('#hfc').click();
+for(const i of['#hfc','#hff'])$(i).onchange=e=>{const f=e.target.files[0];e.target.value='';hproc(f)};
+M.querySelectorAll('[name=hh]').forEach(x=>x.onchange=e=>{if(e.target.value==='1'){hh=true;$('#hb').classList.remove('hid')}
+else{if(anexoH&&!confirm('Mudar para "Não" vai remover a reserva de hospedagem anexada. Continuar?')){M.querySelector('[name=hh][value="1"]').checked=true;return}hh=false;anexoH=null;hlist();$('#hb').classList.add('hid')}});
+$('#sv').onclick=()=>{const e=[],n=val('nome'),ds=val('desc'),di=$('[name=di]').value,df=$('[name=df]').value,c=$('[name=cc]').value;
+if(!n)e.push('Nome é obrigatório.');if(!ds)e.push('Descrição é obrigatória.');if(!di||!df)e.push('Informe Data Início e Data Fim.');else if(df<di)e.push('Data Fim deve ser maior ou igual à Data Início.');if(!c)e.push('Selecione o centro de custo.');
+if(e.length){$('#ms').innerHTML=`<div class="err">${e.join('<br>')}</div>`;scrollTo(0,0);return}
+const now=new Date().toISOString(),o={...(ex||{id:newId(),despesas:[],criadoEm:now}),nome:n,descricao:ds,dataInicio:di,dataFim:df,organizacao:$('[name=org]').value,centroCusto:c,funcionalSap:val('sap'),quickLookId:ex?.quickLookId||p?.quickLookId||'',numeroViagemSap:val('nv'),adiantamento:cv('ad'),cartaoCorporativo:cv('cc2'),comentarios:val('com'),houveHospedagem:hh,anexoHospedagem:hh?anexoH:null};
+if(upsertRelatorio(o))go('/relatorio/'+o.id)};wire()}
+
+const allAnx=r=>r.despesas.flatMap(d=>d.anexos.map(a=>({...a,d})));
+const thumb=a=>a.tipo==='application/pdf'?(a.paginasImagem?.[0]||''):a.dataUrl;
+function detail(id){const r=getRelatorio(id);if(!r)return nf();const t=calcularTotais(r),sd=t.valorReembolso>0,an=allAnx(r),hh=r.houveHospedagem===true,hr=hh&&r.anexoHospedagem||null;
+const ii=(l,v)=>`<div><div class="mut">${l}</div><b>${esc(v)||'—'}</b></div>`;
+M.innerHTML=`<div class="row" style="align-items:center;margin-bottom:1rem"><div style="display:flex;gap:.5rem;align-items:center;min-width:0"><button class="btn o i" data-go="/">${ic('left')}</button><div style="min-width:0"><h1 style="margin:0;font-size:1.2rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.descricao)}</h1><div class="mut">${esc(r.nome)}</div></div></div><button class="btn o i" data-go="/relatorio/${id}/editar" aria-label="Editar">${ic('pencil')}</button></div>
+<div class="card l"><h3>Dados da viagem</h3><b style="font-size:1.05rem">${esc(r.descricao)}</b><div style="background:oklch(0.38 0.09 160/.1);border-radius:var(--r);padding:.6rem;margin:.6rem 0;display:flex;gap:1.5rem;flex-wrap:wrap">${ii('Funcional SAP',r.funcionalSap)}${ii('Nº Viagem SAP',r.numeroViagemSap)}</div><div class="g2" style="gap:.75rem">${ii('Nome',r.nome)}${ii('Datas',fd(r.dataInicio)+' a '+fd(r.dataFim))}${ii('Organização',r.organizacao)}${ii('Centro de custo',r.centroCusto)}${ii('QuickLook ID',r.quickLookId)}${ii('Houve hospedagem',hh?'Sim':'Não')}${ii('Adiantamento',fmt(r.adiantamento))}${ii('Cartão Corporativo',fmt(r.cartaoCorporativo))}${r.comentarios?ii('Comentários',r.comentarios):''}</div></div>
+${hr?`<div class="card l"><h3>${ic('clip')} Reserva de hospedagem <span class="badge">${ic('check',12)} anexada</span></h3><div style="display:flex;gap:.6rem;align-items:center">${thumb(hr)?`<img src="${thumb(hr)}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)" alt="">`:`<div class="av">${ic('file',22)}</div>`}<div style="min-width:0"><div><span class="mut">Reserva de hospedagem:</span> <b style="word-break:break-all">${esc(hr.nome)}</b></div><div class="mut">${hr.paginasImagem?.length?hr.paginasImagem.length+' pág. · ':''}primeiro anexo no PDF</div></div></div></div>`:''}
+<div class="g2"><div class="card sum"><div style="opacity:.8">Total despesas</div><b style="font-size:1.5rem">${fmt(t.totalDespesas)}</b></div><div class="card"><div class="mut">${sd?'A receber':'A devolver'}</div><b style="font-size:1.5rem;color:${sd?'var(--primary)':'var(--fg)'}">${sd?ic('up',20)+' '+fmt(t.valorReembolso):ic('down',20)+' '+fmt(t.valorDevolucao)}</b></div></div>
+${t.porCategoria.some(c=>c.total>0)?`<div class="card"><h3>Somatórios por categoria</h3>${t.porCategoria.filter(c=>c.total>0).map(c=>`<div class="row" style="padding:.25rem 0"><span>${c.nome}</span><b>${fmt(c.total)}</b></div>`).join('')}</div>`:''}
+<div class="card"><div class="row" style="align-items:center;margin-bottom:.5rem"><h3 style="margin:0">Despesas (${r.despesas.length})</h3><button class="btn o" data-go="/relatorio/${id}/despesa/nova">${ic('plus',16)} Adicionar</button></div>
+${r.despesas.length?r.despesas.map(d=>`<div style="border-top:1px solid var(--bd);padding:.75rem 0" class="row"><div style="min-width:0"><div>${ic('receipt',16)} <b>${d.tipoNome}</b> <span class="badge o">${d.tipoCodigo}</span> ${d.anexos.length?`<span class="badge">${ic('clip',12)} ${d.anexos.length}</span>`:''}</div><div class="mut">${fd(d.data)}${d.osSr?' · OS/SR '+esc(d.osSr):''}${d.distancia?' · '+d.distancia+' km':''}</div>${d.origem||d.destino?`<div class="mut">${esc(d.origem)} → ${esc(d.destino)}</div>`:''}${d.observacao?`<div class="mut">${esc(d.observacao)}</div>`:''}<div class="th">${d.anexos.slice(0,3).map(a=>thumb(a)?`<img src="${thumb(a)}" alt="">`:'').join('')}</div></div><div style="text-align:right;flex:none"><b style="color:var(--primary)">${fmt(d.valor)}</b><div><button class="btn g i" data-go="/relatorio/${id}/despesa/${d.id}" aria-label="Editar">${ic('pencil')}</button><button class="btn g i" data-dd="${d.id}" aria-label="Excluir">${ic('trash')}</button></div></div></div>`).join(''):'<div class="empty mut">Nenhuma despesa. Toque em "Adicionar".</div>'}</div>
+${an.length?`<div class="card"><h3>Comprovantes (${an.length})</h3><div class="th">${an.map(a=>thumb(a)?`<img src="${thumb(a)}" title="${esc(a.nome)}" alt="${esc(a.nome)}">`:`<span class="badge">${esc(a.nome)}</span>`).join('')}</div></div>`:''}
+${bar(`<button class="btn o" data-go="/relatorio/${id}/despesa/nova">Nova despesa</button><button class="btn a" id="ex">${ic('filedown')} Exportar PDF</button>`)}`;
+M.querySelectorAll('[data-dd]').forEach(b=>b.onclick=()=>{if(confirm('Excluir esta despesa?')){deleteDespesa(id,b.dataset.dd);detail(id)}});
+$('#ex').onclick=()=>exportar(getRelatorio(id));wire()}
+
+let anx=[];
+function despForm(rid,did,banner){const r=getRelatorio(rid);if(!r)return nf();const ex=did&&r.despesas.find(x=>x.id===did);if(did&&!ex)return nf();
+const d=ex||{tipoCodigo:TIPOS[0].codigo,data:'',valor:0,distancia:'',origem:'',destino:'',osSr:'',observacao:'',anexos:[]};anx=[...d.anexos];
+M.innerHTML=`<div class="row" style="align-items:center;margin-bottom:1rem"><div style="display:flex;gap:.5rem;align-items:center"><button class="btn o i" data-go="/relatorio/${rid}">${ic('left')}</button><h1 style="margin:0;font-size:1.3rem">${ex?'Editar despesa':'Nova despesa'}</h1></div><span class="badge">${r.despesas.length} lançadas</span></div>
+${banner?'<div class="ok">'+ic('check',16)+' Despesa salva. Lance a próxima.</div>':''}<div id="ms"></div>
+<div class="card"><h3>Tipo e valor</h3><label>Tipo*</label><select class="in" name="tp">${TIPOS.map(t=>`<option value="${t.codigo}" ${t.codigo===d.tipoCodigo?'selected':''}>${t.nome}</option>`).join('')}</select><div class="g2"><div><label>Data*</label><input class="in" type="date" name="dt" min="${r.dataInicio}" max="${r.dataFim}" value="${d.data}"></div><div><label>Valor*</label>${cur('vl',d.valor)}</div></div><label>Distância (km)</label><input class="in" type="number" min="0" step="0.1" name="ds" value="${d.distancia??''}"></div>
+<div class="card"><h3>Trajeto e observações</h3><label>Origem</label><input class="in" name="og" value="${esc(d.origem)}"><label>Destino</label><input class="in" name="dn" value="${esc(d.destino)}"><div class="g2"><div><label>OS/SR</label><input class="in" name="os" value="${esc(d.osSr)}"></div><div><label>Observação curta</label><input class="in" name="ob" value="${esc(d.observacao)}"></div></div></div>
+<div class="card"><h3>Comprovantes <span class="badge" id="cn"></span></h3><input type="file" id="fc" class="hid" accept="image/*" capture="environment"><input type="file" id="ff" class="hid" accept="image/*,application/pdf" multiple>
+<div class="g2" style="gap:.5rem"><button class="btn dash" id="bc" style="margin-bottom:.5rem">${ic('camera',22)} Tirar foto</button><button class="btn dash" id="bf" style="margin-bottom:.5rem">${ic('clip',22)} Anexar PDF/Imagem</button></div><div id="ld" class="mut hid"><span class="sp" style="display:inline-block">${ic('loader',16)}</span> Processando arquivos…</div><div id="al"></div></div>
+${bar(`<button class="btn o" id="sa">${ic('plusc')} Salvar e adicionar outra despesa</button><button class="btn" id="s1">Salvar</button>${ex?`<button class="btn d i" id="dl" aria-label="Excluir">${ic('trash')}</button>`:''}`)}`;
+const list=()=>{$('#cn').textContent=anx.length;$('#al').innerHTML=anx.map((a,i)=>`<div class="row" style="align-items:center;border-top:1px solid var(--bd);padding:.5rem 0"><div style="display:flex;gap:.6rem;align-items:center;min-width:0">${thumb(a)?`<img src="${thumb(a)}" style="width:48px;height:48px;object-fit:cover;border-radius:8px" alt="">`:`<div class="av">${ic('file',22)}</div>`}<div style="min-width:0"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><b>${esc(a.nome)}</b></div><div class="mut">${a.tipo}${a.paginasImagem?.length?' · '+a.paginasImagem.length+' pág.':''}</div></div></div><button class="btn g i" data-rm="${i}" aria-label="Remover">${ic('x')}</button></div>`).join('');
+$('#al').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{anx.splice(+b.dataset.rm,1);list()})};list();
+const proc=async fs=>{$('#ld').classList.remove('hid');for(const f of fs){try{const pdf=f.type==='application/pdf'||/\.pdf$/i.test(f.name),u=await fileToDataUrl(f),a={id:newId(),nome:f.name,tipo:pdf?'application/pdf':(f.type||'application/octet-stream'),dataUrl:u,criadoEm:new Date().toISOString()};if(pdf){a.paginasImagem=await renderPdfComoImagens(u,8,1.4);if(!a.paginasImagem.length)$('#ms').innerHTML='<div class="err">Não foi possível gerar as páginas de '+esc(f.name)+'. Verifique a conexão e tente de novo; sem isso o PDF não sai no relatório impresso.</div>'}anx.push(a)}catch(e){$('#ms').innerHTML=`<div class="err">Falha ao ler ${esc(f.name)}.</div>`}}$('#ld').classList.add('hid');list()};
+$('#bc').onclick=()=>$('#fc').click();$('#bf').onclick=()=>$('#ff').click();
+for(const i of['#fc','#ff'])$(i).onchange=e=>{proc([...e.target.files]);e.target.value=''};
+const save=()=>{const e=[],dt=$('[name=dt]').value,v=cv('vl'),t=TIPOS.find(x=>x.codigo===$('[name=tp]').value);
+if(!t)e.push('Tipo inválido.');if(!dt)e.push('Informe a data.');else if(dt<r.dataInicio||dt>r.dataFim)e.push(`A data deve estar entre ${fd(r.dataInicio)} e ${fd(r.dataFim)}.`);if(!(v>0))e.push('O valor deve ser maior que zero.');
+if(e.length){$('#ms').innerHTML=`<div class="err">${e.join('<br>')}</div>`;scrollTo(0,0);return false}
+const km=val('ds');return upsertDespesa(rid,{id:ex?.id||newId(),data:dt,tipoCodigo:t.codigo,tipoNome:t.nome,valor:v,distancia:km?Number(km):undefined,origem:val('og'),destino:val('dn'),osSr:val('os'),observacao:val('ob'),anexos:anx})};
+$('#s1').onclick=()=>{if(save())go('/relatorio/'+rid)};
+$('#sa').onclick=()=>{if(!save())return;if(location.hash==='#/relatorio/'+rid+'/despesa/nova')despForm(rid,null,true);else location.replace('#/relatorio/'+rid+'/despesa/nova')};
+if($('#dl'))$('#dl').onclick=()=>{if(confirm('Excluir esta despesa?')){deleteDespesa(rid,did);go('/relatorio/'+rid)}};wire()}
+let flash=false;
+
+function html(r){const t=calcularTotais(r),now=new Date().toLocaleString('pt-BR'),an=allAnx(r),hh=r.houveHospedagem===true,hr=hh&&r.anexoHospedagem||null;
+const li=(l,v)=>`<div><span>${l}</span><b>${esc(v)||'—'}</b></div>`;
+return`<!DOCTYPE html><html><head><meta charset="utf-8"><title>RAVE ${esc(r.descricao)}</title><style>@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:11px;color:#111;margin:0}.h{background:#14532d;color:#fff;padding:12px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between;border-radius:6px}.h h1{margin:2px 0;font-size:22px}.g{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:12px 0}.g div{border-bottom:1px solid #d1d5db;padding:3px 0;display:flex;justify-content:space-between;gap:8px}.g span{color:#555}h2{font-size:13px;color:#14532d;border-bottom:2px solid #14532d;margin:14px 0 6px}table{width:100%;border-collapse:collapse;font-size:9.5px}th{background:#14532d;color:#fff}th,td{border:1px solid #cbd5e1;padding:3px 4px;text-align:left}.cm{background:#ecfdf5;border-left:4px solid #10b981;padding:8px;margin:10px 0}.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:50px}.sg div{border-top:1px solid #111;text-align:center;padding-top:4px;font-weight:bold}.ft{margin-top:20px;font-size:9px;color:#555;text-align:center}.pg{page-break-before:always;text-align:center}.pg img{max-width:100%;max-height:240mm}</style></head><body>
+<div class="h"><div style="display:flex;gap:10px;align-items:center">${logo(44)}<div><div>NCR ATLEOS · RAVE Web</div><h1>RAVE</h1><div>Relatório Administrativo de Viagens e Entretenimento / Travel &amp; Entertainment Expense Report</div></div></div><div style="text-align:right">Gerado em<br><b>${now}</b><br>ID<br><b>${r.id}</b></div></div>
+<div class="g">${li('Nome',r.nome)}${li('Descrição',r.descricao)}${li('Datas',fd(r.dataInicio)+' a '+fd(r.dataFim))}${li('Organização',r.organizacao)}${li('Funcional SAP',r.funcionalSap)}${li('Centro de Custo',r.centroCusto)}${li('QuickLook ID',r.quickLookId)}${li('Houve hospedagem',hh?'Sim':'Não')}${hr?li('Reserva de hospedagem',hr.nome):''}${li('Nº Viagem SAP',r.numeroViagemSap)}${li('Adiantamento',fmt(r.adiantamento))}${li('Cartão corporativo',fmt(r.cartaoCorporativo))}${li('Comprovantes anexados',an.length)}</div>
+<h2>Despesas / Expenses</h2><table><tr><th>#</th><th>Data</th><th>Despesa</th><th>Valor</th><th>Dist.</th><th>Origem</th><th>Destino</th><th>Obs.</th><th>OS/SR</th><th>Anex.</th></tr>${r.despesas.map((d,i)=>`<tr><td>${i+1}</td><td>${fd(d.data)}</td><td>${d.tipoNome}</td><td>${fmt(d.valor)}</td><td>${d.distancia||''}</td><td>${esc(d.origem)}</td><td>${esc(d.destino)}</td><td>${esc(d.observacao)}</td><td>${esc(d.osSr)}</td><td>${d.anexos.length}</td></tr>`).join('')}</table>
+<h2>Somatórios e Resumo Financeiro</h2><div class="g"><div><span>Total das despesas</span><b>${fmt(t.totalDespesas)}</b></div>${t.porCategoria.filter(c=>c.total>0).map(c=>`<div><span>${c.nome}</span><b>${fmt(c.total)}</b></div>`).join('')}<div><span>Adiantamento</span><b>${fmt(t.adiantamento)}</b></div><div><span>Cartão corporativo</span><b>${fmt(t.cartaoCorporativo)}</b></div><div><span>A devolver</span><b>${fmt(t.valorDevolucao)}</b></div><div><span>A reembolsar</span><b>${fmt(t.valorReembolso)}</b></div></div>
+${r.comentarios?`<div class="cm"><b>Comentários:</b><br>${esc(r.comentarios)}</div>`:''}
+<div class="sg"><div>VISTO VIAJANTE</div><div>GESTOR</div><div>ADM</div></div>
+<div class="ft">versão RAVE Web · baseado na planilha RAVE 4.0 · ©2024 NCR ATLEOS, All rights reserved. NCR ATLEOS – Confidential (Restricted)</div>
+${hr?(()=>{const im=hr.tipo==='application/pdf'?(hr.paginasImagem||[]):[hr.dataUrl],T='ANEXO — RESERVA DE HOSPEDAGEM';if(!im.length)return`<div class="pg"><p><b>${T}</b> — ${esc(hr.nome)}</p><p>Não foi possível renderizar as páginas deste arquivo.</p></div>`;return im.map((s,i)=>`<div class="pg"><p><b>${T}</b> — ${esc(hr.nome)}${im.length>1?` (pág. ${i+1}/${im.length})`:''}</p><img src="${s}"></div>`).join('')})():''}
+${an.map(a=>{const im=a.tipo==='application/pdf'?(a.paginasImagem||[]):[a.dataUrl];return im.map((s,i)=>`<div class="pg"><p><b>Comprovante: ${esc(a.nome)}</b> — ${a.d.tipoNome} · ${fd(a.d.data)} · ${fmt(a.d.valor)}${im.length>1?` (pág. ${i+1}/${im.length})`:''}</p><img src="${s}"></div>`).join('')}).join('')}
+</body></html>`}
+function exportar(r){const w=window.open('','_blank');if(!w){alert('Habilite pop-ups para exportar o PDF.');return}
+w.document.open();w.document.write(html(r));w.document.close();setTimeout(()=>{w.focus();w.print()},800)}
+
+function nf(){M.innerHTML=`<div style="text-align:center;padding:4rem 1rem"><h1 style="font-size:4rem;margin:0">404</h1><p>Page Not Found</p><a class="btn" href="#/">Go Back Home</a></div>`}
+function renderApp(){try{const p=(location.hash.slice(1)||'/').replace(/\/$/,'')||'/';let m;
+$('#ft').innerHTML=p==='/'?'':'RAVE Web · ©2024 NCR ATLEOS · Baseado na planilha RAVE 4.0';
+if(!perfilCompleto()&&p!=='/perfil')return perfilForm(true);
+if(p==='/')home();else if(p==='/perfil')perfilForm(false);else if(p==='/relatorio/novo')relForm();
+else if(m=p.match(/^\/relatorio\/([^/]+)\/editar$/))relForm(m[1]);
+else if(m=p.match(/^\/relatorio\/([^/]+)\/despesa\/nova$/))despForm(m[1],null,false);
+else if(m=p.match(/^\/relatorio\/([^/]+)\/despesa\/([^/]+)$/))despForm(m[1],m[2]);
+else if(m=p.match(/^\/relatorio\/([^/]+)$/))detail(m[1]);else nf();scrollTo(0,0)}
+catch(e){console.error(e);M.innerHTML=`<div class="card"><h3>${ic('alert')} Algo deu errado</h3><p class="mut">${esc(e.message)}</p><a class="btn" href="#/">Voltar ao início</a></div>`}}
+function render(){
+ $('#us').classList.toggle('hid',!USER||RECOVERY);
+ if(!sb){$('#ft').innerHTML='';M.innerHTML='<div class="card"><div class="err">Não foi possível carregar o serviço de login. Verifique a conexão e recarregue a página.</div></div>';return}
+ if(!BOOTED){M.innerHTML='<div class="card"><p class="mut">Carregando…</p></div>';return}
+ if(!USER||RECOVERY)return telaLogin();
+ renderApp()
+}
+addEventListener('hashchange',render);
+addEventListener('online',()=>{if(USER)flush()});
+document.addEventListener('visibilitychange',async()=>{
+ if(document.visibilityState!=='visible'||!USER||RECOVERY||Object.keys(PEND).length)return;
+ try{if(await carregarDados()&&(location.hash.slice(1)||'/')==='/')render()}catch(e){}
+});
+$('#out').onclick=sair;
+render();
+if(sb)sb.auth.onAuthStateChange((ev,s)=>{setTimeout(()=>sessao(s,ev),0)});
+</script></body></html>
